@@ -27,4 +27,4 @@ RUN dotnet publish "./almacen-samplag.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "almacen-samplag.dll"]
+ENTRYPOINT ["dotnet", "almacen-samplag.dll", "--urls", "http://+:8080"]
