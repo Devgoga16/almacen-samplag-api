@@ -10,10 +10,18 @@ namespace almacen_samplag.Controllers
     {
         private readonly IProductoService _productoService;
         private readonly IColaboradorService _colaboradorService;
-        public CRUDController(IProductoService productoService, IColaboradorService colaboradorService)
+        private readonly IClienteService _clienteService;
+        private readonly IPresentacionService _presentacionService;
+        public CRUDController(
+                IProductoService productoService, 
+                IColaboradorService colaboradorService,
+                IClienteService clienteService,
+                IPresentacionService presentacionService)
         {
             _productoService = productoService;
             _colaboradorService = colaboradorService;
+            _clienteService = clienteService;
+            _presentacionService = presentacionService;
         }
         [HttpGet]
         [Route("producto")]
@@ -76,6 +84,37 @@ namespace almacen_samplag.Controllers
         public async Task<IActionResult> DeleteColaboradorAsync(int id)
         {
             var response = await _colaboradorService.DeleteColaboradorAsync(id);
+            return Ok(response);
+        }
+        [HttpGet]
+        [Route("presentacion")]
+        public async Task<ActionResult<IEnumerable<Colaborador>>> GetPresentacionesAsync()
+        {
+            var response = await _presentacionService.GetPresentacionesAsync();
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("presentacion")]
+        public async Task<ActionResult<IEnumerable<Colaborador>>> InsertPresentacionAsync([FromBody] Presentacion presentacion)
+        {
+            var response = await _presentacionService.InsertPresentacionAsync(presentacion);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("presentacion")]
+        public async Task<ActionResult<bool>> UpdatePresentacionAsync([FromBody] Presentacion presentacion)
+        {
+            var response = await _presentacionService.UpdatePresentacionAsync(presentacion);
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("presentacion/{id}")]
+        public async Task<IActionResult> DeletePresentacionAsync(int id)
+        {
+            var response = await _presentacionService.DeletePresentacionAsync(id);
             return Ok(response);
         }
     }

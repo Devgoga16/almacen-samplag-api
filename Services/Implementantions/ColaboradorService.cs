@@ -48,7 +48,6 @@ namespace almacen_samplag.Services.Implementantions
 
                 colaborador.nombreColaborador = colaboradorUpdated.nombreColaborador;
 
-                var asdasd = await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
