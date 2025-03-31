@@ -1,10 +1,11 @@
 ﻿using almacen_samplag.Models;
+using almacen_samplag.Services.Interfaces;
 using ApiCore.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace almacen_samplag.Services.Implementantions
 {
-    public class PresentacionService
+    public class PresentacionService : IPresentacionService
     {
         private readonly AppDbContext _context;
         public PresentacionService(AppDbContext context)
