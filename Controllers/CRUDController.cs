@@ -87,6 +87,37 @@ namespace almacen_samplag.Controllers
             return Ok(response);
         }
         [HttpGet]
+        [Route("cliente")]
+        public async Task<ActionResult<IEnumerable<Colaborador>>> GetClienteesAsync()
+        {
+            var response = await _clienteService.GetClienteesAsync();
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("cliente")]
+        public async Task<ActionResult<IEnumerable<Cliente>>> InsertClienteAsync([FromBody] Cliente cliente)
+        {
+            var response = await _clienteService.InsertClienteAsync(cliente);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("cliente")]
+        public async Task<ActionResult<bool>> UpdateClienteAsync([FromBody] Cliente cliente)
+        {
+            var response = await _clienteService.UpdateClienteAsync(cliente);
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("cliente/{id}")]
+        public async Task<IActionResult> DeleteClienteAsync(int id)
+        {
+            var response = await _clienteService.DeleteClienteAsync(id);
+            return Ok(response);
+        }
+        [HttpGet]
         [Route("presentacion")]
         public async Task<ActionResult<IEnumerable<Colaborador>>> GetPresentacionesAsync()
         {
