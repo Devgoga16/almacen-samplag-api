@@ -10,5 +10,6 @@ namespace ApiCore.Data
         {
         }
         public DbSet<Producto> Producto { get; set; }
+        public DbSet<Colaborador> Colaborador { get; set; }
     }
 }
