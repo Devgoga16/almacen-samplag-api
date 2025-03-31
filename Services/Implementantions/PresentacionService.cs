@@ -47,6 +47,7 @@ namespace almacen_samplag.Services.Implementantions
                 }
 
                 Presentacion.nombrePresentacion = PresentacionUpdated.nombrePresentacion;
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception)

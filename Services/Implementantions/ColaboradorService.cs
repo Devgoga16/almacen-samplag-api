@@ -47,6 +47,7 @@ namespace almacen_samplag.Services.Implementantions
                 }
 
                 colaborador.nombreColaborador = colaboradorUpdated.nombreColaborador;
+                await _context.SaveChangesAsync();
 
                 return true;
             }

@@ -47,6 +47,7 @@ namespace almacen_samplag.Services.Implementantions
                 }
 
                 Cliente.nombreCliente = ClienteUpdated.nombreCliente;
+                await _context.SaveChangesAsync();
 
                 return true;
             }
