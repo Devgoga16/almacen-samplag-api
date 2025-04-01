@@ -27,9 +27,8 @@ namespace almacen_samplag.Services.Implementantions
         {
             try
             {
-                var adsasdasdas = _context.Cliente.Add(cliente);
-                var asdasd = await _context.SaveChangesAsync();
-                cliente.idCliente = asdasd;
+                _context.Cliente.Add(cliente);
+                await _context.SaveChangesAsync();
                 return cliente;
             }
             catch (Exception)

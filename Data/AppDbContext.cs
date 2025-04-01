@@ -13,5 +13,7 @@ namespace ApiCore.Data
         public DbSet<Colaborador> Colaborador { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Presentacion> Presentacion { get; set; }
+        public DbSet<Servicio> Servicio { get; set; }
+        public DbSet<ServicioColaborador> ServicioColaborador { get; set; }
     }
 }
