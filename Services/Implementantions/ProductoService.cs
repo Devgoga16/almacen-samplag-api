@@ -1,4 +1,5 @@
 ﻿using almacen_samplag.Models;
+using almacen_samplag.Models.Response;
 using almacen_samplag.Services.Interfaces;
 using ApiCore.Data;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,22 @@ namespace almacen_samplag.Services.Implementantions
         {
             _context = context;
         }
-        public async Task<IEnumerable<Producto>> GetProductosAsync()
+        public async Task<IEnumerable<ProductoResponse>> GetProductosAsync()
         {
+            var presentaciones = await _context.Presentacion.ToListAsync();
             try
             {
-                return await _context.Producto.ToListAsync();
+                var productos = await _context.Producto.ToListAsync();
+
+                List<ProductoResponse> response = productos.Select(p => ProductoResponse.FromProducto(p)).ToList();
+
+                foreach (var producto in response)
+                {
+                    var presentacion = presentaciones.FirstOrDefault(x => x.idPresentacion == producto.idPresentacion);
+                    producto.presentacion = presentacion?.nombrePresentacion ?? "Sin presentación";
+                }
+
+                return response;
             }
             catch (Exception)
             {
