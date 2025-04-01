@@ -18,6 +18,23 @@ namespace almacen_samplag.Controllers
         {
             _servicioService = servicioService;
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ServicioResponseList>>> GetProductosAsync()
+        {
+            _responseDTO = new ResponseDTO();
+
+            try
+            {
+                var resultService = await _servicioService.GetServicioList();
+                var response = _responseDTO.Success(_responseDTO, resultService);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = _responseDTO.Failed(_responseDTO, ex);
+                return BadRequest(response);
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult<ServicioResponse>> InsertProductoAsync([FromBody] ServicioRequest servicio)

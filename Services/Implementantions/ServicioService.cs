@@ -1,8 +1,10 @@
-﻿using almacen_samplag.Models;
+﻿using System.ComponentModel;
+using almacen_samplag.Models;
 using almacen_samplag.Models.Request;
 using almacen_samplag.Models.Response;
 using almacen_samplag.Services.Interfaces;
 using ApiCore.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace almacen_samplag.Services.Implementantions
 {
@@ -15,6 +17,26 @@ namespace almacen_samplag.Services.Implementantions
             _context = context;
         }
 
+        public async Task<List<ServicioResponseList>> GetServicioList()
+        {
+            try
+            {
+                List<ServicioResponseList> response = new List<ServicioResponseList>();
+
+                response = await _context.Database.SqlQueryRaw<ServicioResponseList>("EXEC spGetServicios").ToListAsync() ?? new List<ServicioResponseList>();
+
+                foreach (var item in response) 
+                {
+                    item.colaboradores = await _context.Database.SqlQueryRaw<Colaborador>("EXEC spGetColaboradoresByServicio @p0", item.idServicio).ToListAsync() ?? new List<Colaborador>();
+                }
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<ServicioResponse> InsertServicioAsync(ServicioRequest request)
         {
             try
