@@ -53,5 +53,23 @@ namespace almacen_samplag.Controllers
                 return BadRequest(response);
             }
         }
+        [HttpDelete]
+        [Route("{idServicio}")]
+        public async Task<ActionResult<bool>> InsertProductoAsync(int idServicio)
+        {
+            _responseDTO = new ResponseDTO();
+
+            try
+            {
+                var resultService = await _servicioService.DeleteService(idServicio);
+                var response = _responseDTO.Success(_responseDTO, resultService);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = _responseDTO.Failed(_responseDTO, ex);
+                return BadRequest(response);
+            }
+        }
     }
 }

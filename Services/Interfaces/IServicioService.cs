@@ -7,5 +7,6 @@ namespace almacen_samplag.Services.Interfaces
     {
         public Task<ServicioResponse> InsertServicioAsync(ServicioRequest request);
         public Task<List<ServicioResponseList>> GetServicioList();
+        public Task<bool> DeleteService(int idService);
     }
 }

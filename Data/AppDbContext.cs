@@ -15,5 +15,6 @@ namespace ApiCore.Data
         public DbSet<Presentacion> Presentacion { get; set; }
         public DbSet<Servicio> Servicio { get; set; }
         public DbSet<ServicioColaborador> ServicioColaborador { get; set; }
+        public DbSet<Movimiento> Movimiento { get; set; }
     }
 }

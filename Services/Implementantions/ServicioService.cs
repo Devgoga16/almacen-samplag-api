@@ -55,7 +55,7 @@ namespace almacen_samplag.Services.Implementantions
 
                 var idServicio = servicio.idServicio;
 
-                foreach(var item in request.idColaboradores)
+                foreach (var item in request.idColaboradores)
                 {
                     ServicioColaborador servicioColaborador = new ServicioColaborador();
                     servicioColaborador.idColaborador = item;
@@ -69,12 +69,50 @@ namespace almacen_samplag.Services.Implementantions
                 response.idServicio = idServicio;
                 response.idCliente = request.idCliente;
                 response.fecha = request.fecha;
-                response.descripcionServicio = request.descripcionServicio;
+                response.descripcionServicio = request.descripcionServicio ?? "";
 
                 return response;
             }
             catch (Exception) 
             {
+                throw;
+            }
+        }
+
+        public async Task<bool> DeleteService(int idService)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var productosByServicio = _context.Movimiento.Where(x => x.idServicio == idService).ToList();
+                if (productosByServicio.Count > 0) {
+                    throw new Exception("Este servicio no se puede eliminar porque cuenta con productos asociados");
+                }
+                else
+                {
+                    var colaboradoresByServicio = _context.ServicioColaborador.Where(x => x.idServicio == idService).ToList();
+
+                    foreach(var item in colaboradoresByServicio)
+                    {
+                        _context.Remove(item);
+                    }
+                    await _context.SaveChangesAsync();
+
+                    var service = _context.Servicio.FirstOrDefault(x => x.idServicio == idService);
+
+                    if (service != null)
+                    {
+                        _context.Remove(service);
+                    }
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                }
+                return true;
+            }
+            catch(Exception)
+            {
+                await transaction.RollbackAsync();
                 throw;
             }
         }
