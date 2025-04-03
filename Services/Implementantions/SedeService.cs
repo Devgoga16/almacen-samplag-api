@@ -12,11 +12,11 @@ namespace almacen_samplag.Services.Implementantions
         {
             _context = context;
         }
-        public async Task<IEnumerable<Sede>> GetSedesAsync()
+        public async Task<List<Sede>> GetSedesAsync(int idCliente)
         {
             try
             {
-                return await _context.Sede.ToListAsync();
+                return await _context.Sede.Where(x => x.idCliente == idCliente).ToListAsync();
             }
             catch (Exception)
             {

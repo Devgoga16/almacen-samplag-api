@@ -332,14 +332,14 @@ namespace almacen_samplag.Controllers
         }
 
         [HttpGet]
-        [Route("sede")]
-        public async Task<ActionResult<IEnumerable<Sede>>> GetSedesAsync()
+        [Route("sede/{idCliente:int}")]
+        public async Task<ActionResult<List<Sede>>> GetSedesAsync(int idCliente)
         {
             _responseDTO = new ResponseDTO();
 
             try
             {
-                var resultService = await _sedeService.GetSedesAsync();
+                var resultService = await _sedeService.GetSedesAsync(idCliente);
                 var response = _responseDTO.Success(_responseDTO, resultService);
                 return Ok(response);
             }
