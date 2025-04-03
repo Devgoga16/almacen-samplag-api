@@ -81,6 +81,7 @@ namespace almacen_samplag.Services.Implementantions
 
         public async Task<bool> UpdateServicioAsync(ServicioRequest request)
         {
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var colaboradoresByServicio = _context.ServicioColaborador.Where(x => x.idServicio == request.idServicio).ToList();
@@ -112,10 +113,13 @@ namespace almacen_samplag.Services.Implementantions
                 _context.Update(servicioForUpdate);
                 await _context.SaveChangesAsync();
 
+                await transaction.CommitAsync();
+
                 return true;
             }
             catch (Exception)
             {
+                await transaction.RollbackAsync();
                 throw;
             }
         }
