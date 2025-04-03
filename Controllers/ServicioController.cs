@@ -11,13 +11,14 @@ namespace almacen_samplag.Controllers
     [ApiController]
     public class ServicioController : ControllerBase
     {
-        private ResponseDTO _responseDTO;
+        private ResponseDTO? _responseDTO;
         private readonly IServicioService _servicioService;
 
         public ServicioController(IServicioService servicioService)
         {
             _servicioService = servicioService;
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServicioResponseList>>> GetProductosAsync()
         {
@@ -53,6 +54,25 @@ namespace almacen_samplag.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpPut]
+        public async Task<ActionResult<bool>> UpdateServicioAsync([FromBody] ServicioRequest servicio)
+        {
+            _responseDTO = new ResponseDTO();
+
+            try
+            {
+                var resultService = await _servicioService.UpdateServicioAsync(servicio);
+                var response = _responseDTO.Success(_responseDTO, resultService);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = _responseDTO.Failed(_responseDTO, ex);
+                return BadRequest(response);
+            }
+        }
+
         [HttpDelete]
         [Route("{idServicio}")]
         public async Task<ActionResult<bool>> InsertProductoAsync(int idServicio)

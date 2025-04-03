@@ -55,7 +55,7 @@ namespace almacen_samplag.Services.Implementantions
 
                 var idServicio = servicio.idServicio;
 
-                foreach (var item in request.idColaboradores)
+                foreach (var item in request.idColaboradores ?? new List<int>())
                 {
                     ServicioColaborador servicioColaborador = new ServicioColaborador();
                     servicioColaborador.idColaborador = item;
@@ -74,6 +74,47 @@ namespace almacen_samplag.Services.Implementantions
                 return response;
             }
             catch (Exception) 
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateServicioAsync(ServicioRequest request)
+        {
+            try
+            {
+                var colaboradoresByServicio = _context.ServicioColaborador.Where(x => x.idServicio == request.idServicio).ToList();
+
+                foreach (var item in colaboradoresByServicio)
+                {
+                    _context.Remove(item);
+                }
+                await _context.SaveChangesAsync();
+
+                foreach (var item in request.idColaboradores ?? new List<int>())
+                {
+                    ServicioColaborador servicioColaborador = new ServicioColaborador();
+                    servicioColaborador.idColaborador = item;
+                    servicioColaborador.idServicio = request.idServicio;
+
+                    _context.ServicioColaborador.Add(servicioColaborador);
+                }
+
+                await _context.SaveChangesAsync();
+
+                Servicio servicioForUpdate = new Servicio();
+
+                servicioForUpdate.idServicio = request.idServicio;
+                servicioForUpdate.idCliente = request.idCliente;
+                servicioForUpdate.descripcionServicio = request.descripcionServicio;
+                servicioForUpdate.fecha = request.fecha;
+
+                _context.Update(servicioForUpdate);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
             {
                 throw;
             }
