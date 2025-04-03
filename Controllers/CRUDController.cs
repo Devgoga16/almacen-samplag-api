@@ -9,22 +9,25 @@ namespace almacen_samplag.Controllers
     [ApiController]
     public class CRUDController : ControllerBase
     {
-        private ResponseDTO _responseDTO;
+        private ResponseDTO? _responseDTO;
         private readonly IProductoService _productoService;
         private readonly IColaboradorService _colaboradorService;
         private readonly IClienteService _clienteService;
         private readonly IPresentacionService _presentacionService;
+        private readonly ISedeService _sedeService;
 
         public CRUDController(
                 IProductoService productoService, 
                 IColaboradorService colaboradorService,
                 IClienteService clienteService,
-                IPresentacionService presentacionService)
+                IPresentacionService presentacionService,
+                ISedeService sedeService)
         {
             _productoService = productoService;
             _colaboradorService = colaboradorService;
             _clienteService = clienteService;
             _presentacionService = presentacionService;
+            _sedeService = sedeService;
         }
         [HttpGet]
         [Route("producto")]
@@ -318,6 +321,82 @@ namespace almacen_samplag.Controllers
             try
             {
                 var resultService = await _presentacionService.DeletePresentacionAsync(id);
+                var response = _responseDTO.Success(_responseDTO, resultService);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = _responseDTO.Failed(_responseDTO, ex);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet]
+        [Route("sede")]
+        public async Task<ActionResult<IEnumerable<Sede>>> GetSedesAsync()
+        {
+            _responseDTO = new ResponseDTO();
+
+            try
+            {
+                var resultService = await _sedeService.GetSedesAsync();
+                var response = _responseDTO.Success(_responseDTO, resultService);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = _responseDTO.Failed(_responseDTO, ex);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost]
+        [Route("sede")]
+        public async Task<ActionResult<IEnumerable<Sede>>> InsertSedeAsync([FromBody] Sede sede)
+        {
+            _responseDTO = new ResponseDTO();
+
+            try
+            {
+                var resultService = await _sedeService.InsertSedeAsync(sede);
+                var response = _responseDTO.Success(_responseDTO, resultService);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = _responseDTO.Failed(_responseDTO, ex);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPut]
+        [Route("sede")]
+        public async Task<ActionResult<bool>> UpdateSedeAsync([FromBody] Sede sede)
+        {
+            _responseDTO = new ResponseDTO();
+
+            try
+            {
+                var resultService = await _sedeService.UpdateSedeAsync(sede);
+                var response = _responseDTO.Success(_responseDTO, resultService);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = _responseDTO.Failed(_responseDTO, ex);
+                return BadRequest(response);
+            }
+        }
+
+        [HttpDelete]
+        [Route("sede/{id}")]
+        public async Task<IActionResult> DeleteSedeAsync(int id)
+        {
+            _responseDTO = new ResponseDTO();
+
+            try
+            {
+                var resultService = await _sedeService.DeleteSedeAsync(id);
                 var response = _responseDTO.Success(_responseDTO, resultService);
                 return Ok(response);
             }
