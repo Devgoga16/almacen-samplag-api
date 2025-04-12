@@ -16,5 +16,7 @@ namespace almacen_samplag.Models.Response
 
         [NotMapped]
         public List<Colaborador>? colaboradores { get; set; }
+        [NotMapped]
+        public List<ProductoMovimientoDto>? productos { get; set; }
     }
 }

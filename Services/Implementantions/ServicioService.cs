@@ -28,6 +28,7 @@ namespace almacen_samplag.Services.Implementantions
                 foreach (var item in response) 
                 {
                     item.colaboradores = await _context.Database.SqlQueryRaw<Colaborador>("EXEC spGetColaboradoresByServicio @p0", item.idServicio).ToListAsync() ?? new List<Colaborador>();
+                    item.productos = await _context.Database.SqlQueryRaw<ProductoMovimientoDto>("EXEC spGetProductosByServicio @p0", item.idServicio).ToListAsync() ?? new List<ProductoMovimientoDto>();
                 }
 
                 return response;
